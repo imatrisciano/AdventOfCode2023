@@ -12,23 +12,23 @@ class Schematic
 		//part numbers are the codes that have a symbol nearby (even in diagonal)
 		List<SchematicCode> partNumbers = new List<SchematicCode>();
 		foreach(SchematicCode code in SchematicCodes)
-			if (SchematicSymbols.Any(symbol => AreSymbolAndCodeAdiacent(symbol, code)))
+			if (SchematicSymbols.Any(symbol => AreSymbolAndCodeAdjacent(symbol, code)))
 				partNumbers.Add(code);
 
 		return partNumbers;
 	}
 
-	private IEnumerable<SchematicCode> GetCodesAdiacentToSymbol(SchematicSymbol symbol)
+	private IEnumerable<SchematicCode> GetCodesAdjacentToSymbol(SchematicSymbol symbol)
 	{
-		return SchematicCodes.Where( code => AreSymbolAndCodeAdiacent(symbol, code));
+		return SchematicCodes.Where( code => AreSymbolAndCodeAdjacent(symbol, code));
 	}
 
-	private bool AreSymbolAndCodeAdiacent(SchematicSymbol symbol, SchematicCode code)
+	private bool AreSymbolAndCodeAdjacent(SchematicSymbol symbol, SchematicCode code)
 	{
-		bool AdiacentOnPreviousAndNextRow = (code.LineNumber == symbol.LineNumber - 1 || code.LineNumber == symbol.LineNumber + 1) && (symbol.Position >= code.StartPosition -1 && symbol.Position <= code.EndPosition +1);
-		bool AdiacentOnSameRow = (code.LineNumber == symbol.LineNumber && (code.EndPosition == symbol.Position - 1 || code.StartPosition == symbol.Position + 1));
+		bool AdjacentOnPreviousAndNextRow = (code.LineNumber == symbol.LineNumber - 1 || code.LineNumber == symbol.LineNumber + 1) && (symbol.Position >= code.StartPosition -1 && symbol.Position <= code.EndPosition +1);
+		bool AdjacentOnSameRow = (code.LineNumber == symbol.LineNumber && (code.EndPosition == symbol.Position - 1 || code.StartPosition == symbol.Position + 1));
 
-		return AdiacentOnPreviousAndNextRow || AdiacentOnSameRow;
+		return AdjacentOnPreviousAndNextRow || AdjacentOnSameRow;
 	}
 
 	public IEnumerable<Gear> GetGears()
@@ -37,11 +37,11 @@ class Schematic
 		IEnumerable<SchematicSymbol> AsteriscsSymbols = SchematicSymbols.Where(x=>x.Symbol == "*");
 		foreach(SchematicSymbol asterisc in AsteriscsSymbols)
 		{
-			var codesAdiacentToAsterisc = GetCodesAdiacentToSymbol(asterisc);
-			if (codesAdiacentToAsterisc.Count() == 2)
+			var codesAdjacentToAsterisc = GetCodesAdjacentToSymbol(asterisc);
+			if (codesAdjacentToAsterisc.Count() == 2)
 			{
 				//code is a gear
-				gears.Add(new Gear(codesAdiacentToAsterisc.ElementAt(0), codesAdiacentToAsterisc.ElementAt(1)));
+				gears.Add(new Gear(codesAdjacentToAsterisc.ElementAt(0), codesAdjacentToAsterisc.ElementAt(1)));
 			}
 		}
 		return gears;
@@ -118,6 +118,3 @@ public class Program
 	}
 
 }
-
-
-
